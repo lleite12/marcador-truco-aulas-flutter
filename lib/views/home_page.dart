@@ -138,7 +138,9 @@ class _HomePageState extends State<HomePage> {
           color: Colors.black.withOpacity(0.1),
           onTap: () {
             setState(() {
-              player.score--;
+              if (player.score != 0)
+                player.score--;
+
             });
           },
         ),
@@ -147,8 +149,10 @@ class _HomePageState extends State<HomePage> {
           color: Colors.deepOrangeAccent,
           onTap: () {
             setState(() {
-              player.score++;
+              if (player.score != 12)
+                player.score++;
             });
+
 
             if (player.score == 12) {
               _showDialog(
@@ -177,6 +181,7 @@ class _HomePageState extends State<HomePage> {
       {String title, String message, Function confirm, Function cancel}) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
