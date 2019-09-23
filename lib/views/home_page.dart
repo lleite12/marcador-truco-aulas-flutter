@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:marcador_truco/models/player.dart';
-//Lucas
+//Lucas 12
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
