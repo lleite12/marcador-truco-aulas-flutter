@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:marcador_truco/models/player.dart';
-//Lucas 12
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -29,6 +29,11 @@ class _HomePageState extends State<HomePage> {
     _resetPlayer(player: _playerTwo, resetVictories: resetVictories);
   }
 
+  void _resetPartida({bool resetVictories = false}) {
+    _resetPlayer(player: _playerOne, resetVictories: resetVictories);
+    _resetPlayer(player: _playerTwo, resetVictories: resetVictories);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +47,18 @@ class _HomePageState extends State<HomePage> {
                   title: 'Zerar',
                   message:
                       'Tem certeza que deseja começar novamente a pontuação?',
+                  confirm: () {
+                    _resetPartida();
+                  });
+            },
+            icon: Icon(Icons.clear),
+          ),
+          IconButton(
+            onPressed: () {
+              _showDialog(
+                  title: 'Resetar',
+                  message:
+                      'Tem certeza que deseja começar novamente a partida?',
                   confirm: () {
                     _resetPlayers();
                   });
