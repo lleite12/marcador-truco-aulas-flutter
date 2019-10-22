@@ -1,6 +1,8 @@
-//import 'package:screen/screen.dart';
+import 'package:screen/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:marcador_truco/models/player.dart';
+
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,11 +17,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _resetPlayers();
-    
+     Screen.keepOn(true);
+
   }
 
-    TextEditingController _nameController = TextEditingController();
-     GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController _nameController = TextEditingController();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool screen = false;
 
   void _resetPlayer({Player player, bool resetVictories = true}) {
     setState(() {
@@ -43,8 +47,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepOrange,
-        title: Text("Marcador Pontos (Truco!)"),
-        actions: <Widget>[
+        title: Text("Marcador Pontos (Truco!)"),        
+        actions: <Widget>[        
           IconButton(
             onPressed: () {
               _showDialog(
