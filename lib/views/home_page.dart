@@ -1,3 +1,4 @@
+//import 'package:screen/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:marcador_truco/models/player.dart';
 
@@ -16,6 +17,9 @@ class _HomePageState extends State<HomePage> {
     _resetPlayers();
     
   }
+
+    TextEditingController _nameController = TextEditingController();
+     GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _resetPlayer({Player player, bool resetVictories = true}) {
     setState(() {
@@ -78,7 +82,7 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          _showPlayerName(player.name),
+          _showPlayerName(player),
           _showPlayerScore(player.score),
           _showPlayerVictories(player.victories),
           _showScoreButtons(player),
@@ -99,14 +103,62 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _showPlayerName(String name) {
-    return Text(
-      name.toUpperCase(),
+  Widget _showPlayerName(Player player) {
+    return GestureDetector(
+      child: Text(
+      player.name.toUpperCase(),
       style: TextStyle(
           fontSize: 22.0,
           fontWeight: FontWeight.w500,
           color: Colors.deepOrange),
+    ),
+      onTap: () {
+        setState(() {
+          _resetName(player);
+        });
+      },
     );
+  }
+
+  void _resetName(Player player) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Trocar nome"),
+            content: Form(
+              key: _formKey,
+              child: TextFormField(
+                decoration: InputDecoration(labelText: 'Novo nome'),
+                controller: _nameController,
+                validator: (text) {
+                  return text.isEmpty ? "Insira um nome!" : null;
+                },
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("CANCEL"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text("OK"),
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    Navigator.of(context).pop();
+                    setState(() {
+                      player.name = _nameController.text;
+                    });
+                    _nameController.text = "";
+                  }
+                },
+              ),
+            ],
+          );
+        });
   }
 
   Widget _showPlayerVictories(int victories) {
@@ -168,8 +220,16 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               if (player.score != 12)
                 player.score++;
+              
             });
 
+           if(_playerOne.score == 11 && _playerTwo.score == 11)
+                _showDialog(
+                    title: 'Mão de ferro!!',
+                    message: 'Todos os jogadores recebem as cartas “cobertas”, isto é, viradas para baixo, e deverão jogar assim. Quem vencer a mão, vence a partida!',
+                    confirm: () {
+                      player.score++;
+            });
 
             if (player.score == 12) {
               _showDialog(
